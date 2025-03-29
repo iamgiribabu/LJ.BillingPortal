@@ -23,6 +23,8 @@
   @page {
     size: A4 portrait;
     margin: 1in; /* Wide margins */
+    -webkit-print-color-adjust: exact; /* Ensure colors print correctly */
+    print-color-adjust: exact;
   }
 
   body {
@@ -33,6 +35,7 @@
     background: white;
     transform: scale(1); /* Fit to page */
     transform-origin: top left;
+    font-family: Cinzel, Arial, Helvetica, sans-serif;
   }
 
   .invoice-container {
@@ -41,6 +44,20 @@
     page-break-before: auto;
     page-break-after: auto;
     page-break-inside: avoid;
+  }
+   /* Remove unnecessary elements */
+   .no-print {
+    display: none !important;
+  }
+
+  /* Adjust table styles */
+  table {
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+    padding: 5px !important;
   }
 }
 

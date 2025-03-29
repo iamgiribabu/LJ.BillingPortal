@@ -16,19 +16,19 @@ const InvoiceTemplate = ({state } : {state : RootState}) => {
       <div className="flex justify-between items-center  pb-4 mx-5">
         <Image src="/LJ lifters.jpg" alt="LJ Lifters Logo" width={122} height={122}  crossOrigin="anonymous"/>
 
-        <div className="flex flex-col justigy-center items-start w-full pl-8">
-          <h1 className="text-[#4F3D88] font-[Cinzel] text-[50px]  font-bold m-0">LJ LIFTERS</h1>
-          <div className="flex flex-col text-sm items-center text-[#002060] font-[Calibri]">
-          <span className="m-0 text-[12px]">Mobile cranes, Farhanas, Hydra Owner & suppliers</span>
-          <span className="m-0 text-[12px]">102/ Sai Pooja Apt, Padwal nagar, Wagle Estate, Thane (W) - 400604</span>
-          <span className="m-0 text-[12px]">Mob : +91 70398 71918, +91 93723 98100</span>
+        <div className="w-full" style={{display : "flex", flexDirection: "column", justifyContent : "between", alignItems : "start", padding : "0px 0px 0px 20px"}}>
+          <div className="text-[#4F3D88]" style={{fontFamily: 'Cinzel', fontWeight : "bold", margin : "0px", fontSize : "50px"}}>LJ LIFTERS</div>
+          <div className="flex flex-col text-sm items-center text-[#002060]" style={{fontFamily: 'Calibri'}}>
+            <span className="m-0 text-[12px]">Mobile cranes, Farhanas, Hydra Owner & suppliers</span>
+            <span className="m-0 text-[12px]">102/ Sai Pooja Apt, Padwal nagar, Wagle Estate, Thane (W) - 400604</span>
+            <span className="m-0 text-[12px]">Mob : +91 70398 71918, +91 93723 98100</span>
           </div>
           
         </div>
       </div>
       <hr style={{ borderWidth: "1px" }}></hr>
-      <div className="flex justify-center font-bold items-center mt-4 h-10 border-[2px] text-2xl ">
-        <h1 className="text-[#4F3D88]">Invoice</h1>
+      <div className="mt-4 h-10 border-[2px] " style={{display : "flex", justifyContent : "center", alignItems : "center"}}>
+        <div className="text-2xl" style = {{ fontWeight : 'bold', color : "#4F3D88", textAlign : "center", margin : "0px", padding : "0px"}}>Invoice</div>
       </div>
       <div className="flex justify-between items-start mt-1">
         {/* Billing Details */}
@@ -51,11 +51,11 @@ const InvoiceTemplate = ({state } : {state : RootState}) => {
         {/* Invoice Details */}
         <div className=" mt-4 text-sm">
           <div>
-            <p className="w-60 flex justify-between"><span className=" text-right w-1/2 border-r pr-1">Invoice Number</span> <span className = "border-l w-1/2 text-left pl-1" style={{ backgroundColor: "#E5E7EB" }}>{invoice.invoiceNumber}</span></p>
-            <p className="w-60 flex justify-between"><span className=" text-right w-1/2 border-r pr-1">Invoice Date</span> <span className = "border-l w-1/2 text-left pl-1" style={{ backgroundColor: "#b7e1cd" }}>{invoice.invoiceDate}</span></p>
-            <p className="w-60 flex justify-between"><span className=" text-right w-1/2 border-r pr-1">Place of Supply</span> <span className = "border-l w-1/2 text-left pl-1">{invoice.placeOfSupply}</span></p>
-            <p className="w-60 flex justify-between"><span className=" text-right w-1/2 border-r pr-1">PO No</span> <span className = "border-l w-1/2 text-left pl-1">{invoice.poNo || 'NA'}</span></p>
-            <p className="w-60 flex justify-between"><span className=" text-right w-1/2 border-r pr-1">Crane Reg</span> <span className = "border-l w-1/2 text-left pl-1">{invoice.craneReg}</span></p>
+            <div className="w-60 flex justify-between"><div className="w-1/2 pr-1" style = {{borderRight : "1px solid", margin : "0px", display: "flex", alignItems : "center", justifyContent : "end"}}>Invoice Number</div> <div className = "w-1/2 text-left pl-1" style={{ backgroundColor: "#E5E7EB", borderLeft : "1px solid"  , display : "flex", justifyContent : "start" , alignItems : "center"}}>{invoice.invoiceNumber}</div></div>
+            <div className="w-60 flex justify-between"><div className="w-1/2 pr-1" style = {{borderRight : "1px solid", margin : "0px", display: "flex", alignItems : "center", justifyContent : "end"}}>Invoice Date</div> <div className = "w-1/2 text-left pl-1" style={{ backgroundColor: "#b7e1cd", borderLeft : "1px solid"  , display : "flex", justifyContent : "start" , alignItems : "center"}}>{invoice.invoiceDate}</div></div>
+            <div className="w-60 flex justify-between"><div className="w-1/2 pr-1" style = {{borderRight : "1px solid", margin : "0px", display: "flex", alignItems : "center", justifyContent : "end"}}>Place of Supply</div> <div className = "w-1/2 text-left pl-1" style={{borderLeft : "1px solid" , display : "flex", justifyContent : "start" , alignItems : "center"}}>{invoice.placeOfSupply}</div></div>
+            <div className="w-60 flex justify-between"><div className="w-1/2 pr-1" style = {{borderRight : "1px solid", margin : "0px", display: "flex", alignItems : "center", justifyContent : "end"}}>PO No</div> <div className = "w-1/2 text-left pl-1" style={{borderLeft : "1px solid" , display : "flex", justifyContent : "start" , alignItems : "center"}}>{invoice.poNo || 'NA'}</div></div>
+            <div className="w-60 flex justify-between"><div className="w-1/2 pr-1" style = {{borderRight : "1px solid", margin : "0px", display: "flex", alignItems : "center", justifyContent : "end"}}>Crane Reg</div> <div className = "w-1/2 text-left pl-1" style={{borderLeft : "1px solid" , display : "flex", justifyContent : "start" , alignItems : "center"}}>{invoice.craneReg}</div></div>
           </div>
         </div>
       </div>
@@ -141,10 +141,10 @@ const InvoiceTemplate = ({state } : {state : RootState}) => {
       <div className="vendor-signature flex justify-between items-start mt-1 text-sm">
         <div className="bank-details">
           <span className="font-bold">Bank Details</span>
-          <span className="text-sm flex"><p className="w-[88px] font-bold">Bank Name:</p> HDFC Bank</span>
-          <span className="text-sm flex"><p className="w-[88px] font-bold">Branch:</p> Wagle Estate</span>
-          <span className="text-sm flex"><p className="w-[88px] font-bold">A/C No:</p> 12345678901234</span>
-          <span className="text-sm flex"><p className="w-[88px] font-bold">IFSC Code:</p> HDFC0001234</span>
+          <span className="text-sm flex" style={{marginTop : "0px", marginBottom : "0px"}}><p className="w-[88px] font-bold">Bank Name:</p> HDFC Bank</span>
+          <span className="text-sm flex" style={{marginTop : "0px", marginBottom : "0px"}}><p className="w-[88px] font-bold">Branch:</p> Wagle Estate</span>
+          <span className="text-sm flex" style={{marginTop : "0px", marginBottom : "0px"}}><p className="w-[88px] font-bold">A/C No:</p> 12345678901234</span>
+          <span className="text-sm flex" style={{marginTop : "0px", marginBottom : "0px"}}><p className="w-[88px] font-bold">IFSC Code:</p> HDFC0001234</span>
         </div>
         <div className="signature h-[150px] flex flex-col justify-start items-end">
           <div className="flex flex-col justify-start items-end h-full">
