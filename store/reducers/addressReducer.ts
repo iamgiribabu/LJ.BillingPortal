@@ -1,36 +1,38 @@
 const initialState = {
-    billedToName: "",
-    addressLine1: "",
-    addressLine2: "",
-    addressLine3: "",
-    gstin: "",
-    state : "",
-    code: "",
+    CompanyName: "",
+    AddressLine1: "",
+    AddressLine2: "",
+    AddressLine3: "",
+    GSTIN: "",
+    State: "",
+    StateCode: "",
+    ClientID: "",
   };
   
-export interface AddressState {
-    billedToName: string;
-    addressLine1: string,
-    addressLine2: string,
-    addressLine3: string,
-    gstin: string;
-    state: string;
-    code: string;
+export interface IAddressState {
+  ClientID?: string;
+  CompanyName: string;
+  AddressLine1: string;
+  AddressLine2: string;
+  AddressLine3: string;
+  GSTIN: string;
+  State: string;
+  StateCode: string;
 }
 
 interface UpdateAddressAction {
-    type: "UPDATE_ADDRESS";
+    type: "ADD_ADDRESS";
     payload: {
-        field: keyof AddressState;
+        field: keyof IAddressState;
         value: string;
     };
 }
 
 type AddressAction = UpdateAddressAction;
 
-const addressReducer = (state: AddressState = initialState, action: AddressAction): AddressState => {
+const addressReducer = (state: IAddressState = initialState, action: AddressAction): IAddressState => {
     switch (action.type) {
-        case "UPDATE_ADDRESS":
+        case "ADD_ADDRESS":
             return { ...state, [action.payload.field]: action.payload.value };
         default:
             return state;

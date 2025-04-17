@@ -8,18 +8,16 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 
-const InvoiceDetails = () => {
+const InvoiceDetails = ({invoiceNumber} : {invoiceNumber : string}) => {
   const dispatch = useDispatch();
   const invoiceDetails = useSelector((state: RootState) => state.invoice);
-  const currentYear = new Date().getFullYear() % 100;
-  const financialYear = `${currentYear}-${(currentYear + 1) % 100}`;
-
   const [placeOfSupply, setPlaceOfSupply] = useState(invoiceDetails.placeOfSupply ? invoiceDetails.placeOfSupply : "");
   const [poNumber, setPoNumber] = useState(invoiceDetails.poNo ? invoiceDetails.poNo : "NA"); 
   const [craneReg, setCraneReg] = useState(invoiceDetails.craneReg);
+  
   useEffect(() => {
     const payload : InvoiceState = {
-      invoiceNumber: invoiceDetails.invoiceNumber ? invoiceDetails.invoiceNumber : `001/LJL/${financialYear}`,
+      invoiceNumber: invoiceDetails.invoiceNumber ? invoiceDetails.invoiceNumber : invoiceNumber,
       invoiceDate: invoiceDetails.invoiceDate ? invoiceDetails.invoiceDate : new Date().toLocaleDateString("en-GB"), // Adding the missing invoiceDate
       placeOfSupply,
       poNo: poNumber,
@@ -30,12 +28,12 @@ const InvoiceDetails = () => {
   },[placeOfSupply, poNumber, craneReg])
 
   return (
-    <div className=" p-6 rounded-2xl  w-full max-w-md mx-auto">
+    <div className="rounded-2xl mx-0 w-full max-w-md mx-auto">
       <div className="space-y-4">
         <div className="flex items-center">
           <span className="font-medium w-1/2 text-right pr-4 text-[#4F3D88]">Invoice Number :</span>
           {/* <div className="border-l-2 border-black h-6"></div> */}
-          <span className="text-black">{`${invoiceDetails.invoiceNumber ? invoiceDetails.invoiceNumber : `001/LJL/${financialYear}`}`} </span>
+          <span className="text-black">{`${invoiceDetails.invoiceNumber ? invoiceDetails.invoiceNumber : invoiceNumber}`} </span>
         </div>
         <div className="flex items-center">
           <span className="font-medium w-1/2 text-right pr-4 text-[#4F3D88]">Invoice Date :</span>

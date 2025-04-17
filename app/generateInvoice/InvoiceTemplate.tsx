@@ -14,7 +14,7 @@ const InvoiceTemplate = ({
   return (
     <div
       ref={invoiceRef}
-      className="invoice-container  border text-black  w-[8.27in] h-[11.69in] mx-auto p-15"
+      className="invoice-container text-black  w-[8.27in] h-[11.69in] mx-auto p-15"
       style={{
         borderColor: "#D1D5DB",
         backgroundColor: "white",
@@ -43,7 +43,7 @@ const InvoiceTemplate = ({
           }}
         >
           <div
-            className=" text-[#4F3D88] border"
+            className=" text-[#4F3D88]"
             style={{
               fontFamily: "Cinzel",
               fontWeight: "bold",
@@ -57,9 +57,9 @@ const InvoiceTemplate = ({
               style={{
                 margin: "0px",
                 padding: "0px",
-                backgroundColor: "yellow",
                 display: "flex",
                 alignItems: "start",
+                textAlign : "center"
               }}
             >
               LJ FILTERS

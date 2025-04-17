@@ -4,46 +4,54 @@ import InvoiceTemplate from '../generateInvoice/InvoiceTemplate'
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useRef } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
 
 
 const Page = () => {
   const state= useSelector((state: RootState) => state);
   const invoiceRef = useRef<HTMLDivElement>(null);
 
-  const handleDownloadPDF = async  () => {
-    if (!invoiceRef.current) return;
+  const handleDownloadPDF = async () => {
+    try {
+        const response = await fetch("http://localhost:5000/api/generateInvoice", {
+            method: "POST",
+            headers: {
+                Accept: "application/pdf", // Ensure correct format
+            },
+        });
 
-    const canvas = await html2canvas(invoiceRef.current, { 
-      scale: 2, // Increase resolution
-      useCORS: true, // Fixes issues with external fonts/images
-      logging: false,
-      allowTaint: true, // Helps with cross-origin images
-      width: invoiceRef.current.scrollWidth, 
-      height: invoiceRef.current.scrollHeight,
-      windowWidth: invoiceRef.current.scrollWidth,
-      windowHeight: invoiceRef.current.scrollHeight,
+        if (!response.ok) {
+            throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+        }
 
-    });
-    const imgData = canvas.toDataURL("image/png");
+        const blob = await response.blob();
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "px",
-      format: "a4",
-      putOnlyUsedFonts: true,
-      floatPrecision: 16, // or "smart", default is 16
-    });
-    const imgWidth = pdf.internal.pageSize.getWidth() //210; // A4 width in mm
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        // Debug: Check if PDF is valid in browser console
+        console.log("✅ Blob type:", blob.type); // Should be "application/pdf"
 
-    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    
-    // Save to file system (change this for API upload)
-    pdf.save("invoice.pdf");
-  };
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "invoice.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("❌ Error downloading PDF:", error);
+    }
+};
+  const saveInvoice = async () => {
+    const { invoice, address, services } = state;
+
+    fetch("http://localhost:5000/api/createInvoice", 
+      {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ invoice, address, services })})
+      .then((response) => response.json())
+      .catch((error) => console.error("Error saving invoice:", error))
+
+  }
 
   return (
     <div className='flex flex-col items-center justify-center'>
@@ -55,6 +63,14 @@ const Page = () => {
         }}
       >
         Download PDF
+      </button>
+      <button
+      className ="no-print bg-green-500 text-white p-2 rounded mt-4"
+      onClick={() => {
+       saveInvoice()
+      }}
+      >
+        Save Invoice
       </button>
     </div>
   )

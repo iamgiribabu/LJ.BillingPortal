@@ -9,19 +9,19 @@ export interface Invoice {
     services : Service[]
   }
 
-const InitialInvoiceState : Invoice[] = []
+const InitialInvoiceState : Invoice | object = {}
 
 interface InvoiceAction {
     type: string;
-    payload: string | Invoice ;
+    payload: Invoice ;
 }
 
-const allInvoiceReducer = (state: Invoice[] = InitialInvoiceState, action: InvoiceAction) => {
+const allInvoiceReducer = (state: Invoice | object = InitialInvoiceState, action: InvoiceAction) => {
     switch(action.type) {
         case "GET_INVOICEs": return state
-        case "ADD_INVOICE": return [...state, action.payload]
-        case "DELETE_INVOICE": return state.filter((invoice) => invoice.id !== action.payload)
-        case "GET_SINGLE_INVOICE": return state.find((invoice) => invoice.id === action.payload) || state[0]
+        case "ADD_INVOICE": return  action.payload
+        // case "DELETE_INVOICE": return state.filter((invoice) => invoice.id !== action.payload)
+        // case "GET_SINGLE_INVOICE": return [state.find((invoice) => invoice.id === action.payload) || state[0]]
         // case "UPDATE_INVOICE":
         //     return {...state, invoiceDetails : {...state.invoiceDetails, [action.payload.field] : action.payload.value}}
         // case "UPDATE_ADDRESS":
