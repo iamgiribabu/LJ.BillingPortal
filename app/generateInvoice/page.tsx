@@ -7,6 +7,7 @@ import { RootState } from "../../store/store";
 import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/navigation';
 import AddressDetails from '../components/AddressDetails'
+import { addInvoicePriceCalculation } from '@/store/actions/invoiceDetails.action';
 
 const Page = () => {
   const router = useRouter();
@@ -21,12 +22,24 @@ const Page = () => {
     console.log("Address", address);
     console.log("Services", services);
 
-    dispatch({ type: "ADD_INVOICE", payload: {
+    const totalAmountBeforeTax = services.reduce((acc, service) => acc + Number(service.taxableValue), 0);
+    const cgst : number = parseFloat((totalAmountBeforeTax * 0.09).toFixed(2)); // 9% of total amount before tax
+    const sgst : number = parseFloat((totalAmountBeforeTax * 0.09).toFixed(2)); // 9% of total amount before tax
+    const igst : number = address.StateCode != 27 ? parseFloat((totalAmountBeforeTax * 0.18).toFixed(2)) : 0; // 18% of total amount before tax
+    const netAmountAfterTax = parseFloat((totalAmountBeforeTax + cgst + sgst + igst).toFixed(2)); // Total amount after tax
+
+    const invoice_data = {
       id: invoiceDetails.invoiceNumber,
-      invoiceDetails: invoiceDetails,
+      invoiceDetails: {...invoiceDetails, ...{totalAmountBeforeTax,
+        cgst,
+        sgst,
+        igst,
+        netAmountAfterTax}},
       address: address,
       services: services
-    } });
+    }
+
+    dispatch(addInvoicePriceCalculation(invoice_data));
 
     router.push('/InvoicePage');
   }

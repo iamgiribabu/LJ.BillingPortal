@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 
+
 const ServiceEntryTable = () => {
   const dispatch = useDispatch();
     interface Service {
@@ -32,19 +33,20 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // const taxableValue = !form.qty ? 1 * parseFloat(form.rate) : (parseFloat(form.qty) * parseFloat((form.rate))).toFixed(2);
     // setServices([...services, { id: services.length + 1, description: form.description, hsnSac: form.hsnSac, rate: parseFloat(form.rate).toFixed(2), qty: form.qty, taxableValue }]);
     const taxableValue = !form.qty
-    ? Math.round(1 * parseFloat(form.rate))
-    : Math.round(parseFloat(form.qty) * parseFloat(form.rate));
+    ? Math.round(1 * parseFloat(form.rate)).toFixed(2)
+    : Math.round(parseFloat(form.qty) * parseFloat(form.rate)).toFixed(2);
   setServices([
     ...services,
     {
       id: services.length + 1,
       description: form.description,
       hsnSac: form.hsnSac,
-      rate: Math.round(parseFloat(form.rate)), // Round the rate
+      rate: Math.round(parseFloat(form.rate)).toFixed(2), // Round the rate
       qty: form.qty,
       taxableValue, // Already rounded
     }])
     setForm({ description: "", hsnSac: "", qty: "", rate: "" });
+    
   };
 
   const handleDelete = (id : number) => {

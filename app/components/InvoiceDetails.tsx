@@ -16,7 +16,7 @@ const InvoiceDetails = ({invoiceNumber} : {invoiceNumber : string}) => {
   const [craneReg, setCraneReg] = useState(invoiceDetails.craneReg);
   
   useEffect(() => {
-    const payload : InvoiceState = {
+    const payload : Partial<InvoiceState> = {
       invoiceNumber: invoiceDetails.invoiceNumber ? invoiceDetails.invoiceNumber : invoiceNumber,
       invoiceDate: invoiceDetails.invoiceDate ? invoiceDetails.invoiceDate : new Date().toLocaleDateString("en-GB"), // Adding the missing invoiceDate
       placeOfSupply,

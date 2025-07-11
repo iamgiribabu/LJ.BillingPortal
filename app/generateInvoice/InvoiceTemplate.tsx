@@ -1,15 +1,50 @@
 "use client";
-import { RootState } from "../../store/store";
+
+import { Invoice } from "@/store/reducers/allInvoiceReducer";
 import Image from "next/image";
 
 const InvoiceTemplate = ({
   state,
   invoiceRef,
 }: {
-  state: RootState;
+  state: Invoice ;
   invoiceRef: React.ForwardedRef<HTMLDivElement>;
 }) => {
-  const { invoice, address, services } = state;
+  const { invoiceDetails, address, services } = state;
+  const numberToWords = (num: number) => {
+    const single = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+    const double = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const formatTens = (num: number) => {
+    if (num < 10) return single[num];
+    if (num < 20) return double[num - 10];
+    return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + single[num % 10] : '');
+    };
+    
+    if (num === 0) return 'Zero';
+    
+    const main = Math.floor(num);
+    const decimal = Math.round((num - main) * 100);
+    
+    let str = '';
+    if (main >= 10000000) str += `${formatTens(Math.floor(main / 10000000))} Crore `;
+    if (main % 10000000 >= 100000) str += `${formatTens(Math.floor((main % 10000000) / 100000))} Lakh `;
+    if (main % 100000 >= 1000) str += `${formatTens(Math.floor((main % 100000) / 1000))} Thousand `;
+    if (main % 1000 >= 100) str += `${single[Math.floor((main % 1000) / 100)]} Hundred `;
+    if (main % 100) str += `${formatTens(main % 100)}`;
+    
+    str = str.trim() + ' Rupees';
+    if (decimal) str += ` and ${formatTens(decimal)} Paise`;
+    
+    return str;
+  };
+
+  const formatCurrencyNumber = (num: number) => {
+    return num.toLocaleString("en-IN", {
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+    });
+  };
 
   return (
     <div
@@ -109,27 +144,27 @@ const InvoiceTemplate = ({
           <div className="font-bold">Details of reciever/ billed to</div>
           <div className="w-100  flex justify-between">
             <span className=" w-40 ">Name:</span>{" "}
-            <span className="w-full text-left">{address.billedToName}</span>
+            <span className="w-full text-left">{address.CompanyName}</span>
           </div>
           <div className="w-100  flex justify-between">
             <span className=" w-40 ">Address :</span>
             <span className="w-full text-left flex flex-col item-start">
-              <span>{address.addressLine1} </span>
-              <span>{address.addressLine2}</span>
-              <span>{address.addressLine3}</span>
+              <span>{address.AddressLine1} </span>
+              <span>{address.AddressLine2}</span>
+              <span>{address.AddressLine3}</span>
             </span>
           </div>
           <div className="w-100  flex justify-between">
             <span className=" w-40 ">GSTIN:</span>{" "}
-            <span className="w-full text-left">{address.gstin}</span>
+            <span className="w-full text-left">{address.GSTIN}</span>
           </div>
           <div className="w-100  flex justify-between">
             <span className=" w-40 ">State:</span>{" "}
-            <span className="w-full text-left">{address.state}</span>
+            <span className="w-full text-left">{address.State}</span>
           </div>
-          <div className="w-100  flex justify-between">
+          <div className="w-45  flex justify-between">
             <span className=" w-40 ">Code:</span>{" "}
-            <span className="w-full text-left">{address.code}</span>
+            <span className="w-full text-right">{address.StateCode}</span>
           </div>
         </div>
 
@@ -159,7 +194,7 @@ const InvoiceTemplate = ({
                   alignItems: "center",
                 }}
               >
-                {invoice.invoiceNumber}
+                {invoiceDetails.invoiceNumber}
               </div>
             </div>
             <div className="w-60 flex justify-between">
@@ -185,7 +220,7 @@ const InvoiceTemplate = ({
                   alignItems: "center",
                 }}
               >
-                {invoice.invoiceDate}
+                {invoiceDetails.invoiceDate}
               </div>
             </div>
             <div className="w-60 flex justify-between">
@@ -210,7 +245,7 @@ const InvoiceTemplate = ({
                   alignItems: "center",
                 }}
               >
-                {invoice.placeOfSupply}
+                {invoiceDetails.placeOfSupply}
               </div>
             </div>
             <div className="w-60 flex justify-between">
@@ -235,7 +270,7 @@ const InvoiceTemplate = ({
                   alignItems: "center",
                 }}
               >
-                {invoice.poNo || "NA"}
+                {invoiceDetails.poNo || "NA"}
               </div>
             </div>
             <div className="w-60 flex justify-between">
@@ -260,7 +295,7 @@ const InvoiceTemplate = ({
                   alignItems: "center",
                 }}
               >
-                {invoice.craneReg}
+                {invoiceDetails.craneReg}
               </div>
             </div>
           </div>
@@ -310,7 +345,7 @@ const InvoiceTemplate = ({
           </tr>
         </thead>
         <tbody>
-          {services.services.map((service, index) => (
+          {services.map((service, index) => (
             <tr key={index} style={{ height: "20px" }}>
               <td
                 className="border-l border-r text-center"
@@ -340,13 +375,13 @@ const InvoiceTemplate = ({
                 className="border-l border-r text-right"
                 style={{ height: "20px", width: "88px" }}
               >
-                ₹{Number(service.rate).toFixed(2)}
+                ₹{formatCurrencyNumber(Number(service.rate))}
               </td>
               <td
                 className="border-l border-r text-right"
                 style={{ height: "20px", width: "88px" }}
               >
-                ₹{Number(service.taxableValue).toFixed(2)}
+                ₹{formatCurrencyNumber(Number(service.taxableValue))}
               </td>
             </tr>
           ))}
@@ -362,7 +397,11 @@ const InvoiceTemplate = ({
               Total invoice in Words :
             </div>
             <span className="w-full text-sm">
-              Two lakh sixty thousand forty eight rupess and forty paise
+              {(() => {
+              
+
+              return numberToWords(Number(invoiceDetails.netAmountAfterTax));
+              })()}
             </span>
           </div>
           <div className="w-full border-t font-bold">
@@ -391,19 +430,19 @@ const InvoiceTemplate = ({
               className="border-l font-bold text-right"
               style={{ width: "86.45px" }}
             >
-              ₹220,380.00
+              ₹{formatCurrencyNumber(Number(invoiceDetails.totalAmountBeforeTax))}
             </span>
           </div>
           <div className="flex justify-between item-center pl-1 border-l border-b">
             <span style={{ width: "85px" }}>CGST @ 9%</span>
             <span className="border-l  text-right" style={{ width: "86.45px" }}>
-              ₹19,834.20
+              ₹{formatCurrencyNumber(invoiceDetails.cgst)}
             </span>
           </div>
           <div className="flex justify-between item-center pl-1 border-l border-b">
             <span style={{ width: "85px" }}>SGST @ 9%</span>
             <span className="border-l text-right" style={{ width: "86.45px" }}>
-              ₹19,834.20
+              ₹{formatCurrencyNumber(invoiceDetails.sgst)}
             </span>
           </div>
           <div className="flex justify-between item-center pl-1 border-l border-b">
@@ -411,7 +450,9 @@ const InvoiceTemplate = ({
             <span
               className="border-l  text-right"
               style={{ width: "86.45px" }}
-            ></span>
+            >
+              ₹{formatCurrencyNumber(invoiceDetails.igst)}
+            </span>
           </div>
           <div className="flex justify-between item-center pl-1 border-l">
             <span style={{ width: "85px" }}>Net Amt after Tax</span>
@@ -419,7 +460,7 @@ const InvoiceTemplate = ({
               className="border-l font-bold text-right"
               style={{ width: "86.45px" }}
             >
-              ₹260,048.40
+              ₹{formatCurrencyNumber(invoiceDetails.netAmountAfterTax)}
             </span>
           </div>
         </div>

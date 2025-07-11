@@ -15,7 +15,7 @@ interface DashBoardDetailsAction {
 
 const dashBoardDetailsReducer = (state: DashBoardDetailsState[] = initialState, action: DashBoardDetailsAction) => {
     switch(action.type) {
-        case "ADD_DASHBOARD_DETAILS": return [...state, ...action.payload]
+        case "ADD_DASHBOARD_DETAILS": return [ ...action.payload]
         default:
             return state
     }

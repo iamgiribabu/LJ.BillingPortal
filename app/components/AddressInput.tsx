@@ -25,16 +25,15 @@ const AddressInput = ({onCancel} : {onCancel : (toogle : boolean) => void}) => {
   };
 
   const handleSubmit = () => {
-    console.log("inputAddress", inputAddress);
     dispatch({ type: "ADD_ADDRESS", payload: inputAddress });
     setInputAddress({
       CompanyName: '',
       AddressLine1: '',
       AddressLine2: '',
       AddressLine3: '',
-      GSTIN: '',
+      GSTIN: 0,
       State: '',
-      StateCode: ''
+      StateCode: 0
     });
     onCancel(false);
   }
@@ -91,6 +90,7 @@ const AddressInput = ({onCancel} : {onCancel : (toogle : boolean) => void}) => {
           <TextField
             fullWidth
             label="GSTIN"
+            type='number'
             value={inputAddress.GSTIN}
             onChange={(e) => handleChange("GSTIN", e.target.value)}
             margin="normal"
@@ -106,6 +106,7 @@ const AddressInput = ({onCancel} : {onCancel : (toogle : boolean) => void}) => {
 
           <TextField
             fullWidth
+            type='number'
             label="Code"
             value={inputAddress.StateCode}
             onChange={(e) => handleChange("StateCode", e.target.value)}

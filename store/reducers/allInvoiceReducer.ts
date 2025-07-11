@@ -1,11 +1,11 @@
-import { AddressState } from "./addressReducer";
+import { IAddressState } from "./addressReducer";
 import { InvoiceState } from "./invoiceReducer";
 import { Service } from "./serviceEntryTable";
 
 export interface Invoice {
     id : string,
     invoiceDetails : InvoiceState ,
-    address : AddressState,
+    address : IAddressState,
     services : Service[]
   }
 
@@ -19,7 +19,9 @@ interface InvoiceAction {
 const allInvoiceReducer = (state: Invoice | object = InitialInvoiceState, action: InvoiceAction) => {
     switch(action.type) {
         case "GET_INVOICEs": return state
-        case "ADD_INVOICE": return  action.payload
+        case "ADD_INVOICE":{ 
+            console.log("Invoice Details in reducer", action.payload);
+            return  {...action.payload}}
         // case "DELETE_INVOICE": return state.filter((invoice) => invoice.id !== action.payload)
         // case "GET_SINGLE_INVOICE": return [state.find((invoice) => invoice.id === action.payload) || state[0]]
         // case "UPDATE_INVOICE":
